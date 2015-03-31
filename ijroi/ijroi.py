@@ -92,8 +92,8 @@ def read_roi(fileobj):
     else:
         getc = get16
         points = np.empty((n_coordinates, 2), dtype=np.int16)
-    points[:,1] = [getc() for i in xrange(n_coordinates)]
-    points[:,0] = [getc() for i in xrange(n_coordinates)]
+    points[:,1] = [getc() for i in range(n_coordinates)]
+    points[:,0] = [getc() for i in range(n_coordinates)]
     points[:,1] += left
     points[:,0] += top
     points -= 1
