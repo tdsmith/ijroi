@@ -89,14 +89,16 @@ def read_roi(fileobj):
     if options & SUB_PIXEL_RESOLUTION:
         getc = getfloat
         points = np.empty((n_coordinates, 2), dtype=np.float32)
+        fileobj.seek(4*n_coordinates,1)
     else:
         getc = get16
         points = np.empty((n_coordinates, 2), dtype=np.int16)
     points[:,1] = [getc() for i in range(n_coordinates)]
     points[:,0] = [getc() for i in range(n_coordinates)]
-    points[:,1] += left
-    points[:,0] += top
-    points -= 1
+    if options & SUB_PIXEL_RESOLUTION == 0:
+        points[:,1] += left
+        points[:,0] += top
+        points -= 1
     return points
 
 def read_roi_zip(fname):
