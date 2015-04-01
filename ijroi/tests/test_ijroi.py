@@ -31,3 +31,11 @@ def test_freehand_circle():
     with fixture.open("rb") as f:
         circle = ijroi.read_roi(f)
     assert abs(circle[:,1].mean()-10) < 0.01
+
+def test_integer_freehand():
+    fixture = get_fixture("freehand_integer.roi")
+    with fixture.open("rb") as f:
+        freehand = ijroi.read_roi(f)
+    assert len(freehand) == 3
+    assert all(freehand[2, :] == [1, 10])
+    assert freehand.dtype == np.int16

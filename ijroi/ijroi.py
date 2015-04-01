@@ -118,7 +118,6 @@ def read_roi(fileobj):
     if options & SUB_PIXEL_RESOLUTION == 0:
         points[:, 1] += left
         points[:, 0] += top
-        points -= 1
 
     return points
 
