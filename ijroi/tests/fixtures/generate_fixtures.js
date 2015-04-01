@@ -7,11 +7,11 @@ importClass(Packages.ij.ImagePlus);
 importClass(Packages.ij.io.RoiEncoder);
 importClass(Packages.ij.process.ByteProcessor);
 
-var processor = ByteProcessor(100, 100);
-var imp = ImagePlus("ImagePlus", processor);
+var subpixel_rectangle = new Roi(4, 5, 4, 5);
+RoiEncoder.save(subpixel_rectangle, "subpixel_rectangle.roi");
 
-var unit_rectangle = Roi(0, 0, 1, 1);
-RoiEncoder.save(unit_rectangle, "unit_rectangle.roi");
+var integer_rectangle = new Roi["(int,int,int,int)"](4, 5, 4, 5);
+RoiEncoder.save(integer_rectangle, "integer_rectangle.roi");
 
 var x = new java.lang.reflect.Array.newInstance(java.lang.Float.TYPE, 100);
 var y = new java.lang.reflect.Array.newInstance(java.lang.Float.TYPE, 100);

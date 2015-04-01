@@ -25,6 +25,19 @@ def read_roi(fileobj):
     SUB_PIXEL_RESOLUTION = 128
     DRAW_OFFSET = 256
 
+    class RoiType:
+        POLYGON = 0
+        RECT = 1
+        OVAL = 2
+        LINE = 3
+        FREELINE = 4
+        POLYLINE = 5
+        NOROI = 6
+        FREEHAND = 7
+        TRACED = 8
+        ANGLE = 9
+        POINT = 10
+
     def get8():
         s = fileobj.read(1)
         if not s:
@@ -55,18 +68,14 @@ def read_roi(fileobj):
     # Discard second Byte:
     get8()
 
-    if not (0 <= roi_type < 11):
+    if roi_type not in [RoiType.FREEHAND, RoiType.RECT]:
         raise ValueError('roireader: ROI type %s not supported' % roi_type)
-
-    if roi_type != 7:
-        raise ValueError('roireader: ROI type %s not supported (!= 7)' % roi_type)
 
     top = get16()
     left = get16()
     bottom = get16()
     right = get16()
     n_coordinates = get16()
-
     x1 = getfloat()
     y1 = getfloat()
     x2 = getfloat()
@@ -84,6 +93,16 @@ def read_roi(fileobj):
     rect_arc_size = get16()
     position = get32()
     header2offset = get32()
+
+    if roi_type == RoiType.RECT:
+        if options & SUB_PIXEL_RESOLUTION:
+            return np.array(
+                [[x1, y1], [x1+x2, y1], [x1+x2, y1+y2], [x1, y1+y2]],
+                dtype=np.float32)
+        else:
+            return np.array(
+                [[left, top], [right, top], [right, bottom], [left, bottom]],
+                dtype=np.int16)
 
     if options & SUB_PIXEL_RESOLUTION:
         getc = getfloat

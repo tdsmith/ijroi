@@ -13,12 +13,18 @@ def get_fixture(name):
 def test_ijroi_import():
     assert ijroi.__version__
 
-@pytest.mark.xfail(raises=ValueError)
-def test_unit_rectangle():
-    fixture = get_fixture("unit_rectangle.roi")
+def test_rectangle():
+    fixture = get_fixture("subpixel_rectangle.roi")
     with fixture.open() as f:
         rect = ijroi.read_roi(f)
-    print(rect)
+    assert (rect == np.array([[4, 5], [8, 5], [8, 10], [4, 10]])).all()
+    assert rect.dtype == np.float32
+
+    fixture = get_fixture("integer_rectangle.roi")
+    with fixture.open() as f:
+        rect = ijroi.read_roi(f)
+    assert (rect == np.array([[4, 5], [8, 5], [8, 10], [4, 10]])).all()
+    assert rect.dtype == np.int16
 
 def test_freehand_circle():
     fixture = get_fixture("freehand_circle.roi")
