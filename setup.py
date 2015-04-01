@@ -11,7 +11,8 @@ setup(
     author='Tim D. Smith',
     author_email='ijroi@tim-smith.us',
     description='Reads ImageJ ROIs.',
-    packages=['ijroi'],
+    packages=['ijroi', 'ijroi.tests'],
+    package_data={'ijroi.tests': ['fixtures/*']},
     platforms='any',
     classifiers=[
         'Development Status :: 4 - Beta',
