@@ -9,7 +9,8 @@ def read_roi(fileobj):
     '''
     points = read_roi(fileobj)
 
-    Read ImageJ's ROI format
+    Read ImageJ's ROI format. Points are returned in a nx2 array. Each row
+    is in [row, column] -- that is, (y,x) -- order.
     '''
     # This is based on:
     # http://rsbweb.nih.gov/ij/developer/source/ij/io/RoiDecoder.java.html
@@ -97,11 +98,11 @@ def read_roi(fileobj):
     if roi_type == RoiType.RECT:
         if options & SUB_PIXEL_RESOLUTION:
             return np.array(
-                [[x1, y1], [x1+x2, y1], [x1+x2, y1+y2], [x1, y1+y2]],
+                [[y1, x1], [y1, x1+x2], [y1+y2, x1+x2], [y1+y2, x1]],
                 dtype=np.float32)
         else:
             return np.array(
-                [[left, top], [right, top], [right, bottom], [left, bottom]],
+                [[top, left], [top, right], [bottom, right], [bottom, left]],
                 dtype=np.int16)
 
     if options & SUB_PIXEL_RESOLUTION:

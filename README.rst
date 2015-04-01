@@ -13,6 +13,9 @@ it like:
     >>> isinstance(roi, np.ndarray)
     True
 
+read\_roi returns a Nx2 array, where each row is a (row, column) or (y,
+x) pair.
+
 Based on `Luis Pedro Coelho <https://github.com/luispedro>`__'s
 `readroi.py gist <https://gist.github.com/luispedro/3437255>`__.
 
