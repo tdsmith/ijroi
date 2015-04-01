@@ -15,19 +15,19 @@ def test_ijroi_import():
 
 def test_rectangle():
     fixture = get_fixture("subpixel_rectangle.roi")
-    with fixture.open() as f:
+    with fixture.open("rb") as f:
         rect = ijroi.read_roi(f)
     assert (rect == np.array([[4, 5], [8, 5], [8, 10], [4, 10]])).all()
     assert rect.dtype == np.float32
 
     fixture = get_fixture("integer_rectangle.roi")
-    with fixture.open() as f:
+    with fixture.open("rb") as f:
         rect = ijroi.read_roi(f)
     assert (rect == np.array([[4, 5], [8, 5], [8, 10], [4, 10]])).all()
     assert rect.dtype == np.int16
 
 def test_freehand_circle():
     fixture = get_fixture("freehand_circle.roi")
-    with fixture.open() as f:
+    with fixture.open("rb") as f:
         circle = ijroi.read_roi(f)
     assert abs(circle[:,1].mean()-10) < 0.01

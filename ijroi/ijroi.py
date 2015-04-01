@@ -59,7 +59,7 @@ def read_roi(fileobj):
         return v.view(np.float32)
 
     magic = fileobj.read(4)
-    if magic != 'Iout':
+    if magic != b'Iout':
         raise IOError('Magic number not found')
     version = get16()
 
