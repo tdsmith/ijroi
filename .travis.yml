@@ -1,9 +1,13 @@
 language: python
 sudo: false
-env:
-- TOXENV=py27
-- TOXENV=py34
+python:
+- "2.7"
+- "3.4"
 install:
-- pip install tox
+- pip install -e .
+before_script:
+- pip install -r test_requirements.txt
 script:
-- tox
+- py.test -v --cov ijroi ijroi
+after_success:
+- coveralls
