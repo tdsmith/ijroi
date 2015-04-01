@@ -1,6 +1,9 @@
 # Copyright: Luis Pedro Coelho <luis@luispedro.org>, 2012
+#            Tim D. Smith <git@tim-smith.us>, 2015
 # License: MIT
+
 import numpy as np
+
 
 def read_roi(fileobj):
     '''
@@ -8,10 +11,9 @@ def read_roi(fileobj):
 
     Read ImageJ's ROI format
     '''
-# This is based on:
-# http://rsbweb.nih.gov/ij/developer/source/ij/io/RoiDecoder.java.html
-# http://rsbweb.nih.gov/ij/developer/source/ij/io/RoiEncoder.java.html
-
+    # This is based on:
+    # http://rsbweb.nih.gov/ij/developer/source/ij/io/RoiDecoder.java.html
+    # http://rsbweb.nih.gov/ij/developer/source/ij/io/RoiEncoder.java.html
 
     SPLINE_FIT = 1
     DOUBLE_HEADED = 2
@@ -23,10 +25,7 @@ def read_roi(fileobj):
     SUB_PIXEL_RESOLUTION = 128
     DRAW_OFFSET = 256
 
-
-    pos = [4]
     def get8():
-        pos[0] += 1
         s = fileobj.read(1)
         if not s:
             raise IOError('readroi: Unexpected EOF')
@@ -68,9 +67,9 @@ def read_roi(fileobj):
     right = get16()
     n_coordinates = get16()
 
-    x1 = getfloat() 
-    y1 = getfloat() 
-    x2 = getfloat() 
+    x1 = getfloat()
+    y1 = getfloat()
+    x2 = getfloat()
     y2 = getfloat()
     stroke_width = get16()
     shape_roi_size = get32()
@@ -89,20 +88,23 @@ def read_roi(fileobj):
     if options & SUB_PIXEL_RESOLUTION:
         getc = getfloat
         points = np.empty((n_coordinates, 2), dtype=np.float32)
-        fileobj.seek(4*n_coordinates,1)
+        fileobj.seek(4*n_coordinates, 1)
     else:
         getc = get16
         points = np.empty((n_coordinates, 2), dtype=np.int16)
-    points[:,1] = [getc() for i in range(n_coordinates)]
-    points[:,0] = [getc() for i in range(n_coordinates)]
+
+    points[:, 1] = [getc() for i in range(n_coordinates)]
+    points[:, 0] = [getc() for i in range(n_coordinates)]
+
     if options & SUB_PIXEL_RESOLUTION == 0:
-        points[:,1] += left
-        points[:,0] += top
+        points[:, 1] += left
+        points[:, 0] += top
         points -= 1
+
     return points
+
 
 def read_roi_zip(fname):
     import zipfile
     with zipfile.ZipFile(fname) as zf:
-        return [read_roi(zf.open(n))
-                    for n in zf.namelist()]
+        return [read_roi(zf.open(n)) for n in zf.namelist()]
