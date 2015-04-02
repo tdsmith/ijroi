@@ -61,7 +61,7 @@ def read_roi(fileobj):
 
     magic = fileobj.read(4)
     if magic != b'Iout':
-        raise IOError('Magic number not found')
+        raise ValueError('Magic number not found')
     version = get16()
 
     # It seems that the roi type field occupies 2 Bytes, but only one is used
@@ -70,7 +70,7 @@ def read_roi(fileobj):
     get8()
 
     if roi_type not in [RoiType.FREEHAND, RoiType.RECT]:
-        raise ValueError('roireader: ROI type %s not supported' % roi_type)
+        raise NotImplementedError('roireader: ROI type %s not supported' % roi_type)
 
     top = get16()
     left = get16()
@@ -87,7 +87,7 @@ def read_roi(fileobj):
     fill_color = get32()
     subtype = get16()
     if subtype != 0:
-        raise ValueError('roireader: ROI subtype %s not supported (!= 0)' % subtype)
+        raise NotImplementedError('roireader: ROI subtype %s not supported (!= 0)' % subtype)
     options = get16()
     arrow_style = get8()
     arrow_head_size = get8()
