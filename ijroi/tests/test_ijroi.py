@@ -30,6 +30,7 @@ def test_freehand_circle():
     fixture = get_fixture("freehand_circle.roi")
     with fixture.open("rb") as f:
         circle = ijroi.read_roi(f)
+    assert len(circle) == 100
     assert abs(circle[:, 1].mean()-10) < 0.01
     assert abs(circle[:, 0].mean()-15) < 0.01
 
@@ -40,3 +41,18 @@ def test_integer_freehand():
     assert len(freehand) == 3
     assert all(freehand[2, :] == [1, 10])
     assert freehand.dtype == np.int16
+
+def test_polygon():
+    fixture = get_fixture("polygon_circle.roi")
+    with fixture.open("rb") as f:
+        circle = ijroi.read_roi(f)
+    assert len(circle) == 100
+    assert abs(circle[:, 1].mean()-10) < 0.01
+    assert abs(circle[:, 0].mean()-15) < 0.01
+
+    fixture = get_fixture("polygon_integer.roi")
+    with fixture.open("rb") as f:
+        polyint = ijroi.read_roi(f)
+    assert len(polyint) == 3
+    assert all(polyint[2, :] == [1, 10])
+    assert polyint.dtype == np.int16
