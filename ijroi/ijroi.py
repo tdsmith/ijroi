@@ -126,4 +126,4 @@ def read_roi(fileobj):
 def read_roi_zip(fname):
     import zipfile
     with zipfile.ZipFile(fname) as zf:
-        return [read_roi(zf.open(n)) for n in zf.namelist()]
+        return [(n, read_roi(zf.open(n))) for n in zf.namelist()]
