@@ -2,6 +2,7 @@
 
 importClass(Packages.ij.gui.Roi);
 importClass(Packages.ij.gui.PolygonRoi);
+importClass(Packages.ij.gui.PointRoi);
 importClass(Packages.ij.IJ);
 importClass(Packages.ij.io.RoiEncoder);
 
@@ -35,5 +36,11 @@ RoiEncoder.save(freehand_integer, "freehand_integer.roi");
 
 polygon_integer = new PolygonRoi(xi, yi, 3, Roi.POLYGON);
 RoiEncoder.save(polygon_integer, "polygon_integer.roi");
+
+var float_point = new PointRoi(123.4, 567.8);
+RoiEncoder.save(float_point, "float_point.roi");
+
+var int_point = new PointRoi["(int,int)"](128, 256);
+RoiEncoder.save(int_point, "int_point.roi");
 
 "Success";

@@ -56,3 +56,19 @@ def test_polygon():
     assert len(polyint) == 3
     assert all(polyint[2, :] == [1, 10])
     assert polyint.dtype == np.int16
+
+def test_point():
+    fixture = get_fixture("int_point.roi")
+    with fixture.open("rb") as f:
+        point = ijroi.read_roi(f)
+    assert point.ndim == 2
+    assert point[0,0] == 256
+    assert point[0,1] == 128
+
+def test_float_point():
+    fixture = get_fixture("float_point.roi")
+    with fixture.open("rb") as f:
+        point = ijroi.read_roi(f)
+    assert point.ndim == 2
+    assert abs(point[0,0] - 567.8) < 0.01
+    assert abs(point[0,1] - 123.4) < 0.01
