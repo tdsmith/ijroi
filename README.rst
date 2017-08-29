@@ -34,7 +34,7 @@ implemented by Luis Pedro Coelho.
    :target: https://travis-ci.org/tdsmith/ijroi
 .. |Coverage Status| image:: https://coveralls.io/repos/tdsmith/ijroi/badge.svg?branch=master
    :target: https://coveralls.io/r/tdsmith/ijroi?branch=master
-.. |PyPI page| image:: https://img.shields.io/pypi/dm/ijroi.svg
+.. |PyPI page| image:: https://img.shields.io/pypi/v/ijroi.svg
    :target: https://pypi.python.org/pypi/ijroi
 .. |MIT license| image:: https://img.shields.io/pypi/l/ijroi.svg
    :target: https://github.com/tdsmith/ijroi/blob/master/COPYING
