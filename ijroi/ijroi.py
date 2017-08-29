@@ -2,6 +2,9 @@
 #            Tim D. Smith <git@tim-smith.us>, 2015
 # License: MIT
 
+from io import BytesIO
+import zipfile
+
 import numpy as np
 
 
@@ -124,8 +127,5 @@ def read_roi(fileobj):
 
 
 def read_roi_zip(fname):
-    import zipfile
-    from io import BytesIO
-    
     with zipfile.ZipFile(fname) as zf:
         return[(n, read_roi(BytesIO(zf.read(n)))) for n in zf.namelist()]
