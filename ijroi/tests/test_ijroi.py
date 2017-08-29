@@ -1,12 +1,16 @@
+import zipfile
+
 import numpy as np
 import py
 
 import ijroi
 
 
+FIXTURE_PATH = py.path.local(__file__).dirpath().join("fixtures")
+
+
 def get_fixture(name):
-    dirpath = py.path.local(__file__).dirpath()
-    return dirpath.join("fixtures", name)
+    return FIXTURE_PATH.join(name)
 
 
 def test_ijroi_import():
@@ -77,3 +81,14 @@ def test_float_point():
     assert point.ndim == 2
     assert abs(point[0, 0] - 567.8) < 0.01
     assert abs(point[0, 1] - 123.4) < 0.01
+
+
+def test_zipfile(tmpdir):
+    fixtures = FIXTURE_PATH.listdir("*.roi")
+    zipname = str(tmpdir.join("fixtures.zip"))
+
+    with zipfile.ZipFile(zipname, "w") as z:
+        for fxpath in fixtures:
+            z.write(str(fxpath), fxpath.basename)
+
+    ijroi.read_roi_zip(zipname)
