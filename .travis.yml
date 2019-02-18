@@ -6,7 +6,7 @@ python:
 install:
 - pip install -e .
 before_script:
-- pip install -r test_requirements.txt
+- pip install --upgrade -r test_requirements.txt
 script:
 - py.test -v --cov ijroi ijroi
 after_success:

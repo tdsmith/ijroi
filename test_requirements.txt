@@ -1,4 +1,4 @@
-py>=1.4.29
-pytest~=2.7.0
+py
+pytest
 pytest-cov
 python-coveralls
