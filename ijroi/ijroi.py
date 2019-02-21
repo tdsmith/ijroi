@@ -62,19 +62,20 @@ def read_roi(fileobj):
         v = np.int32(get32())
         return v.view(np.float32)
 
+    #===========================================================================
+    #Read Header data
+    
     magic = fileobj.read(4)
     if magic != b'Iout':
         raise ValueError('Magic number not found')
+        
     version = get16()
 
     # It seems that the roi type field occupies 2 Bytes, but only one is used
     roi_type = get8()
     # Discard second Byte:
     get8()
-
-    if roi_type not in [RoiType.FREEHAND, RoiType.POLYGON, RoiType.RECT, RoiType.POINT]:
-        raise NotImplementedError('roireader: ROI type %s not supported' % roi_type)
-
+    
     top = get16()
     left = get16()
     bottom = get16()
@@ -89,8 +90,7 @@ def read_roi(fileobj):
     stroke_color = get32()
     fill_color = get32()
     subtype = get16()
-    if subtype != 0:
-        raise NotImplementedError('roireader: ROI subtype %s not supported (!= 0)' % subtype)
+    
     options = get16()
     arrow_style = get8()
     arrow_head_size = get8()
@@ -98,8 +98,21 @@ def read_roi(fileobj):
     position = get32()
     header2offset = get32()
 
+    # End Header data
+    #===========================================================================
+
+    #RoiDecoder.java checks the version when setting sub-pixel resolution, therefore so do we
+    subPixelResolution = ((options&SUB_PIXEL_RESOLUTION)!=0) and (version>=222)
+    
+    # Check exceptions
+    if roi_type not in [RoiType.FREEHAND, RoiType.TRACED, RoiType.POLYGON, RoiType.RECT, RoiType.POINT]:
+        raise NotImplementedError('roireader: ROI type %s not supported' % roi_type)
+        
+    if subtype != 0:
+        raise NotImplementedError('roireader: ROI subtype %s not supported (!= 0)' % subtype)
+    
     if roi_type == RoiType.RECT:
-        if options & SUB_PIXEL_RESOLUTION:
+        if subPixelResolution:
             return np.array(
                 [[y1, x1], [y1, x1+x2], [y1+y2, x1+x2], [y1+y2, x1]],
                 dtype=np.float32)
@@ -108,7 +121,7 @@ def read_roi(fileobj):
                 [[top, left], [top, right], [bottom, right], [bottom, left]],
                 dtype=np.int16)
 
-    if options & SUB_PIXEL_RESOLUTION:
+    if subPixelResolution:
         getc = getfloat
         points = np.empty((n_coordinates, 2), dtype=np.float32)
         fileobj.seek(4*n_coordinates, 1)
@@ -119,7 +132,7 @@ def read_roi(fileobj):
     points[:, 1] = [getc() for i in range(n_coordinates)]
     points[:, 0] = [getc() for i in range(n_coordinates)]
 
-    if options & SUB_PIXEL_RESOLUTION == 0:
+    if not subPixelResolution:
         points[:, 1] += left
         points[:, 0] += top
 
